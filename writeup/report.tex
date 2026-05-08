@@ -14,7 +14,7 @@
 \hypersetup{colorlinks=true, linkcolor=blue!50!black, citecolor=blue!50!black,
             urlcolor=blue!50!black}
 
-\graphicspath{{../results/figures/}{../eda/}}
+\graphicspath{{../results/figures/}{../results/diagnostics/}{../eda/}}
 
 \title{\textbf{NBA Point-Spread Accuracy: A Bayesian Multilevel Analysis}\\
        \large STAT 4224/5224 — Spring 2026 Final Project}
@@ -391,9 +391,13 @@ preserved; magnitudes are compressed under the tight prior.}
 \subsection{Robustness checks}
 
 (i) \emph{Anomalous seasons.} Re-fitting after dropping the 2019--20 bubble
-and 2020--21 fan-less seasons (2{,}050 games) leaves all conclusions
-qualitatively unchanged: $\E[\tau^2 \mid y]$ moves to $0.30$,
-$\E[\beta_1 \mid y]$ to $+0.22$, $\E[\beta_2 \mid y]$ to $-0.07$.
+and 2020--21 fan-less seasons (2{,}050 games, leaving $N = 9{,}486$) leaves
+all conclusions qualitatively unchanged: $\E[\tau^2 \mid y] = 0.345$
+(vs.~$0.314$ in the full sample), $\E[\beta_1 \mid y] = +0.273$
+(vs.~$+0.207$), $\E[\beta_2 \mid y] = -0.053$ (vs.~$-0.093$), and
+$\E[\mu \mid y] = -0.21$. The slightly larger $\beta_1$ when bubble games
+are excluded is consistent with the bubble's compressed schedule
+attenuating any rest signal in the broader sample.
 
 (ii) \emph{Distributional fit.} Posterior-predictive replicates of the
 spread-error distribution match the empirical histogram (Figure~\ref{fig:eda_hist})
