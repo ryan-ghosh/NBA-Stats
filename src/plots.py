@@ -189,6 +189,54 @@ def fig_prior_sensitivity(prim: dict, tight: dict, out: Path) -> None:
     fig.tight_layout(); fig.savefig(out); plt.close(fig)
 
 
+def fig_pairwise_heatmap(s: dict, out: Path) -> None:
+
+    teams = list(s["teams"])
+    n_teams = len(teams)
+    th = s["theta"].reshape(-1, n_teams)
+
+    #Sort teams ascending by posterior mean theta
+    th_mean = th.mean(axis=0)
+    order = np.argsort(th_mean)
+    th_sorted = th[:, order]
+    teams_sorted = [teams[i] for i in order]
+
+
+    P = (th_sorted[:, :, None] < th_sorted[:, None, :]).mean(axis=0)
+    np.fill_diagonal(P, 0.5)
+
+
+
+    fig, ax = plt.subplots(figsize=(9.5, 8.2))
+    im = ax.imshow(P, cmap="RdBu_r", vmin=0, vmax=1, aspect="equal")
+
+    ax.set_xticks(np.arange(n_teams))
+    ax.set_yticks(np.arange(n_teams))
+    ax.set_xticklabels(teams_sorted, fontsize=7, rotation=90)
+    ax.set_yticklabels(teams_sorted, fontsize=7)
+
+    ax.set_xticks(np.arange(-0.5, n_teams, 1), minor=True)
+    ax.set_yticks(np.arange(-0.5, n_teams, 1), minor=True)
+    ax.grid(which="minor", color="#ffffff", linestyle="-", linewidth=0.4)
+    ax.tick_params(which="minor", length=0)
+
+    ax.set_xlabel("Team $j$ (column)")
+    ax.set_ylabel("Team $i$ (row)")
+    ax.set_title(
+        r"Pairwise Team-Superiority : $P(\theta_i < \theta_j \mid \text{data})$"
+        "\nTeams sorted by posterior mean (top: most overrated, bottom: most underrated)",
+        fontsize=10,
+    )
+
+    cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    cbar.set_label(r"$P$(row team has more negative bias than column team)",
+                   fontsize=9)
+
+    fig.tight_layout()
+    fig.savefig(out)
+    plt.close(fig)
+
+
 def main():
     here = Path(__file__).resolve().parents[1]
     fig_dir = here / "results" / "figures"; fig_dir.mkdir(exist_ok=True, parents=True)
@@ -203,6 +251,7 @@ def main():
     fig_rho(prim, fig_dir / "04_rho_density.png")
     fig_betas(prim, fig_dir / "05_beta_intervals.png")
     fig_prior_sensitivity(prim, tight, fig_dir / "06_prior_sensitivity.png")
+    fig_pairwise_heatmap(prim, fig_dir / "08_pairwise_heatmap.png")
     print("Figures saved to", fig_dir)
 
 

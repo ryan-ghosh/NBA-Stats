@@ -18,7 +18,9 @@
 
 \title{\textbf{NBA Point-Spread Accuracy: A Bayesian Multilevel Analysis}\\
        \large STAT 4224/5224 — Spring 2026 Final Project}
-\author{Ryan Ghosh \\ \small\texttt{rg3681@columbia.edu}}
+\author{Ryan Ghosh \\ \small\texttt{rg3681@columbia.edu}
+        \and
+        Robert Solomon \\ \small\texttt{rs4759@columbia.edu}}
 \date{May 7, 2026}
 
 \newcommand{\thj}{\theta_j}
@@ -29,6 +31,11 @@
 \maketitle
 
 \begin{abstract}\noindent
+A point spread is a bookmaker's handicap on the favorite. For example, a $-7$ favorite is 
+predicted to win by $7$ points, and the favorite ``covers the spread'' only if 
+it wins by more than that line. The \emph{spread error} 
+$X = (\text{actual margin}) - |\text{spread}|$ therefore measures how much the 
+closing line missed the realized outcome by, and is the primary outcome we model.
 We fit a two-level Bayesian hierarchical normal model to 11{,}536 regular-season
 NBA games from 2014--15 through 2023--24 to quantify how much teams
 systematically beat or fall short of their closing point spreads, after
@@ -359,6 +366,32 @@ teams the credible interval includes zero.
 Teams whose intervals lie wholly above (below) zero have systematic
 over-cover (under-cover) bias as favorites.}
 \label{fig:caterpillar}
+\end{figure}
+
+While Figure~\ref{fig:caterpillar}'s marginal credible intervals nearly all
+cross zero, marginal intervals understate the certainty of contrasts between
+teams, as the shared league-wide mean and season effects cancel when
+comparing two teams directly. Figure~\ref{fig:pairwise} plots posterior
+pairwise probabilities $P(\theta_i < \theta_j \mid y)$ across all $435$
+unordered team matchups, sorted by posterior mean $\hat\theta_j$.
+Intuitively, each cell measures how confident the data lets us be that the
+row team is more chronically overrated by the market than the column team:
+red cells indicate confidence that yes, blue cells indicate confidence that
+no, and pale cells indicate the data cannot distinguish them. The vast
+majority of cells lie near $0.5$, reflecting franchises the data cannot
+tell apart. The matrix corners, however, reveal sharp credible distinctions
+at the tails. Only $3$ pairs achieve $P > 0.95$, all involving Washington
+(vs.~Jazz: $0.965$; vs.~76ers: $0.959$; vs.~Spurs: $0.958$). This is the
+concrete content of our small-but-nonzero $\tau^2$ finding credible
+team-level distinctions exist, but only at the extremes of the team
+distribution.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.85\textwidth]{08_pairwise_heatmap.png}
+\caption{Posterior pairwise probability $P(\theta_i < \theta_j \mid y)$
+for all $30$ teams.}
+\label{fig:pairwise}
 \end{figure}
 
 \section{Sensitivity Analysis}\label{sec:sensitivity}
