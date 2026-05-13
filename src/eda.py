@@ -1,15 +1,10 @@
-"""
-eda.py
-======
-Exploratory plots for the NBA spread-error dataset. Saves PNGs to ../eda/.
-"""
-
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy import stats
+
 
 plt.rcParams.update({
     "figure.dpi": 110,
@@ -20,12 +15,15 @@ plt.rcParams.update({
 })
 
 
+
 def plot_error_hist(df: pd.DataFrame, out: Path) -> None:
     fig, ax = plt.subplots(figsize=(7.5, 4.2))
     err = df["error"].values
     ax.hist(err, bins=60, density=True, color="#4c72b0", alpha=0.85,
             edgecolor="white", linewidth=0.4)
     xs = np.linspace(err.min(), err.max(), 400)
+
+
     ax.plot(xs, stats.norm.pdf(xs, err.mean(), err.std()),
             color="#c44e52", lw=2, label=f"N({err.mean():.2f}, {err.std():.2f}²)")
     ax.set_xlabel("Spread error  X = actual margin − |spread|  (favorite-perspective, points)")
@@ -39,6 +37,8 @@ def plot_team_means(df: pd.DataFrame, out: Path) -> None:
     g = df.groupby("fav_team")["error"].agg(["mean", "std", "count"])
     g["se"] = g["std"] / np.sqrt(g["count"])
     g = g.sort_values("mean")
+
+    
     fig, ax = plt.subplots(figsize=(8.5, 7.5))
     y = np.arange(len(g))
     ax.errorbar(g["mean"], y, xerr=2 * g["se"], fmt="o", color="#4c72b0",
@@ -65,7 +65,8 @@ def plot_season_means(df: pd.DataFrame, out: Path) -> None:
 
 def plot_home_rest(df: pd.DataFrame, out: Path) -> None:
     fig, axes = plt.subplots(1, 2, figsize=(10, 4))
-    # home vs road favorite
+
+    #home vs road favorite
     ax = axes[0]
     g = df.groupby("home")["error"].agg(["mean", "std", "count"])
     g["se"] = g["std"] / np.sqrt(g["count"])
@@ -75,7 +76,8 @@ def plot_home_rest(df: pd.DataFrame, out: Path) -> None:
     ax.axhline(0, color="black", lw=0.7, ls="--")
     ax.set_ylabel("Mean spread error (pts), ±2 SE")
     ax.set_title("Mean spread error by favorite location")
-    # rest differential bucket
+
+
     ax = axes[1]
     df2 = df.copy()
     df2["rdb"] = pd.cut(df2["rest_diff_raw"],
@@ -114,7 +116,8 @@ def main() -> None:
     plot_home_rest(df, out_dir / "04_home_and_rest.png")
     plot_sample_sizes(df, out_dir / "05_sample_sizes.png")
     print("EDA plots saved to", out_dir)
-    # Quick text summary
+
+
     print(f"\nGrand mean error: {df['error'].mean():+.3f}  SD: {df['error'].std():.3f}")
     print(f"Shapiro p-value (sample of 5000): {stats.shapiro(df['error'].sample(min(5000, len(df)), random_state=0)).pvalue:.3g}")
     print(f"Skew: {stats.skew(df['error']):.3f}, Kurt(excess): {stats.kurtosis(df['error']):.3f}")
