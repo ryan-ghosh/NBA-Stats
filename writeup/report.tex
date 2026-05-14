@@ -21,7 +21,7 @@
 \author{Ryan Ghosh \\ \small\texttt{rg3681@columbia.edu}
         \and
         Robert Solomon \\ \small\texttt{rs4759@columbia.edu}}
-\date{May 7, 2026}
+\date{May 14, 2026}
 
 \newcommand{\thj}{\theta_j}
 \newcommand{\IG}{\mathrm{IG}}
@@ -178,7 +178,7 @@ coefficients is centered at zero (the efficient-market view) but allows
 effects up to roughly $\pm 2$ points. The $\sigma^2$ prior is anchored at
 the empirical variance with $\nu_0 = 1$ pseudo-observation, so the data
 dominate. Both $\tau^2$ priors are weak ($\eta_0 = 1$), with prior mean
-$\tau_0^2 = 1$ corresponding to a between-team SD of one point — plausible
+$\tau_0^2 = 1$ corresponding to a between-team SD of one point, which is plausible
 but not informative.
 
 \subsection{Contrasting prior for sensitivity analysis}
@@ -249,8 +249,7 @@ burn-in, leaving $10{,}000$ kept draws per chain ($40{,}000$ total).
 \subsection{Convergence}
 
 Table~\ref{tab:summary} reports posterior summaries together with split-chain
-$\hat R$ (Vehtari et al.~\cite{vehtari}) and effective sample size (Geyer's
-initial monotone sequence estimator) under both priors. All scalar
+$\hat R$ (Vehtari et al.~\cite{vehtari}) and ESS under both priors. All scalar
 parameters achieve $\hat R \le 1.003$ and bulk ESS $\ge 989$, well above the
 common targets of $\hat R < 1.01$ and ESS $> 1{,}000$. Across all 30 team
 intercepts the worst $\hat R$ is $1.002$ (tight prior) and the worst ESS is
@@ -442,8 +441,8 @@ assumption is therefore tenable.
 
 The headline answer to our research question is:
 \emph{after controlling for rest, home court, and season, between-team
-heterogeneity in spread bias is small but credibly positive — about $0.6$
-points of standard deviation, or $0.2\%$ of total error variance — and the
+heterogeneity in spread bias is small but credibly positive (about $0.6$
+points of standard deviation, or $0.2\%$ of total error variance) and the
 betting market is approximately efficient on average and approximately
 unbiased in its handling of rest and home court.}
 
@@ -470,7 +469,7 @@ the literature finding that closing lines slightly under-adjust for
 favorites' rest advantage~\cite{levitt}. With a larger sample one could
 sharpen this estimate.
 
-\section{Wow Factor: Posterior-Predictive Betting}
+\section{Extension: Posterior-Predictive Betting}
 
 To make the model's predictive content concrete, we ran a simple
 \emph{posterior-predictive} betting simulation. For each game we computed
@@ -494,7 +493,7 @@ between $0.45$ and $0.55$ track the actual cover rates closely.
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\textwidth]{07_wow_betting.png}
-\caption{Wow factor. \textbf{Left}: ROI per bet vs.\ cutoff on
+\caption{Posterior-predictive betting extension. \textbf{Left}: ROI per bet vs.\ cutoff on
 posterior $\Pr(\text{favorite covers}\mid y)$, with bet volume in gray.
 The horizontal red line is the $-4.55\%$ break-even at $-110$ odds.
 \textbf{Right}: predicted cover probability vs.\ realized cover rate
